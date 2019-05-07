@@ -1,0 +1,14 @@
+<h1>post/new</h1>
+
+<?php echo $this->tag->form("post/create"); ?>
+
+    <p>
+        <label for="message">message</label>
+        <?php echo $this->tag->textField("message"); ?>
+    </p>
+
+    <p>
+        <?php echo $this->tag->submitButton("post your message"); ?>
+    </p>
+
+</form>

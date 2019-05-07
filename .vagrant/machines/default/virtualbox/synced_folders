@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/r.sugikawa/Desktop/fhalcon_lineapi","disabled":false,"__vagrantfile":true},"/var/www/":{"guestpath":"/var/www","hostpath":"/Users/r.sugikawa/Desktop/fhalcon_lineapi/sync","disabled":false,"__vagrantfile":true}}}
