@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
   #同期先を指定。「カレントディレクトリ（.）を/vagrant以下に同期」と、「syncディレクトリを/var/www/」以下に同期する。
   config.vm.synced_folder ".", "/vagrant"
   config.vm.synced_folder "sync", "/var/www/"
-  config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 80, host: 8000
   #ここで、epelとremiを使えるようにします。
   config.vm.provision "shell", inline: <<-SHELL
     sudo yum update -y

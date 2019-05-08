@@ -8,6 +8,8 @@ if ($posts->count() >= 0) {
         <tr>
             <th>#</th>
             <th>message</th>
+            <th>line送信</th>
+            <th>削除</th>
         </tr>
         </thead>
         <tfoot>
@@ -20,6 +22,17 @@ if ($posts->count() >= 0) {
             <tr>
                 <td><?php echo $post->id; ?></td>
                 <td><?php echo $post->message; ?></td>
+                <td>
+                  <form action="/post/send" method="post">
+                        <input type="hidden" name="id" value="<?php echo $post->id; ?>" >
+                        <input type="submit" value="lineに送信">
+                  </form>
+                </td>
+                <td>
+                  <form action="/post/delete/<?php echo $post->id; ?>" method="post">
+                        <input type="submit" value="削除">
+                  </form>
+                </td>
             </tr>
         <?php } ?>
         </tbody>

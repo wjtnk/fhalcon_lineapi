@@ -11,6 +11,12 @@ use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
 
+
+//デバッグするのに必要(debugコンポーネントを使用する際には最後のtry-chachを無効にする必要がある)
+$debug = new \Phalcon\Debug();
+$debug->listen();
+
+
 // Register an autoloader
 $loader = new Loader();
 
@@ -18,10 +24,14 @@ $loader->registerDirs(
     [
         APP_PATH . '/controllers/',
         APP_PATH . '/models/',
+        APP_PATH . '/forms/',
+        BASE_PATH . '/cache/',
     ]
 );
 
 $loader->register();
+
+
 
 // Create a DI
 $di = new FactoryDefault();
@@ -61,13 +71,23 @@ $di->set(
     }
 );
 
+
 $application = new Application($di);
 
-try {
-    // Handle the request
-    $response = $application->handle();
+// Handle the request
+$response = $application->handle();
+$response->send();
 
-    $response->send();
-} catch (\Exception $e) {
-    echo 'Exception: ', $e->getMessage();
-}
+
+//debugコンポーネントを使用する際にはtry-chachを無効にする必要がある
+// try {
+//     // Handle the request
+//     $response = $application->handle();
+//     $response->send();
+// } catch (\Exception $e) {
+//     // echo 'Exception: ', $e->getMessage();
+//     echo get_class($e), ': ', $e->getMessage(), '\n';
+//     echo ' File=', $e->getFile(), '\n';
+//     echo ' Line=', $e->getLine(), '\n';
+//     echo $e->getTraceAsString();
+// }
