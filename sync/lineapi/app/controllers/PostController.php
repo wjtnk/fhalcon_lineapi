@@ -1,13 +1,14 @@
 <?php
 
+
 use Phalcon\Mvc\Controller;
 
 class PostController extends Controller
 {
     public function indexAction()
     {
-      $this->view->posts = Posts::find();
 
+      $this->view->posts = Posts::find();
     }
 
     public function newAction()

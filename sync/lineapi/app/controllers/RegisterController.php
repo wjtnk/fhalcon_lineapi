@@ -50,12 +50,12 @@ class RegisterController extends ControllerBase
                 $this->tag->setDefault('password', '');
                 $this->flash->success('Thanks for sign-up, please log-in to start generating invoices');
 
-                return $this->dispatcher->forward(
-                    [
-                        "controller" => "session",
-                        "action"     => "index",
-                    ]
-                );
+                // return $this->dispatcher->forward(
+                //     [
+                //         "controller" => "session",
+                //         "action"     => "index",
+                //     ]
+                // );
             }
         }
 

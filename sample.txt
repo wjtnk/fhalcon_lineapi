@@ -1,0 +1,15 @@
+<p>---------</p>
+<p><?php echo $abc; ?></p>
+$this->view->abc = $this->session->get('auth');
+<p>---------</p>
+
+
+if ($this->session->has('auth')) {
+    echo var_dump($this->session->get('auth'));
+}
+return;
+
+
+'post'     => ['index','delete'],
+'session'      => ['index','start'],
+'register'      => ['index'],

@@ -6,16 +6,17 @@ use Phalcon\Mvc\Application;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Url as UrlProvider;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
+use Phalcon\Mvc\Dispatcher;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Session\Adapter\Files as Session;
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
 
-
 //デバッグするのに必要(debugコンポーネントを使用する際には最後のtry-chachを無効にする必要がある)
 $debug = new \Phalcon\Debug();
 $debug->listen();
-
 
 // Register an autoloader
 $loader = new Loader();
@@ -25,13 +26,12 @@ $loader->registerDirs(
         APP_PATH . '/controllers/',
         APP_PATH . '/models/',
         APP_PATH . '/forms/',
+        APP_PATH . '/plugins/',
         BASE_PATH . '/cache/',
     ]
 );
 
 $loader->register();
-
-
 
 // Create a DI
 $di = new FactoryDefault();
@@ -70,6 +70,38 @@ $di->set(
         );
     }
 );
+
+$di->set(
+    'session',
+    function () {
+        $session = new Session();
+        $session->start();
+        return $session;
+    }
+);
+
+$di->set(
+    'dispatcher',
+    function () {
+      $eventsManager = new EventsManager();
+      // Listen for events produced in the dispatcher using the Security plugin
+      $eventsManager->attach(
+          'dispatch:beforeExecuteRoute',
+          new SecurityPlugin()
+      );
+      // Handle exceptions and not-found exceptions using NotFoundPlugin
+      $eventsManager->attach(
+          'dispatch:beforeException',
+          new NotFoundPlugin()
+      );
+      $dispatcher = new Dispatcher();
+      $dispatcher->setEventsManager($eventsManager);
+      return $dispatcher;
+
+    }
+);
+
+
 
 
 $application = new Application($di);
