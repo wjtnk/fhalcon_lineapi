@@ -21,6 +21,7 @@ class SessionController extends ControllerBase
           //http://192.168.6.10:8000/session/indexのUsername/Emailとpasword欄に初期値を代入
             $this->tag->setDefault('email', 'wjtnk@icloud.com');
             $this->tag->setDefault('password', 'renren1219');
+
         }
 
     }

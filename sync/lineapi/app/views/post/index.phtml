@@ -1,5 +1,6 @@
 <?php
-echo "<h1>post index</h1>";
+echo "<h1>post index!!</h1>";
+
 if ($posts->count() >= 0) {
     ?>
     <table class="table table-bordered table-hover">
@@ -38,3 +39,9 @@ if ($posts->count() >= 0) {
     </table>
     <?php
 }
+?>
+
+
+<form action="/session/end" method="post6">
+      <input type="submit" value="ログアウト">
+</form>

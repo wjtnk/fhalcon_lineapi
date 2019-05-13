@@ -18,16 +18,14 @@ class SecurityPlugin extends Plugin
 	/**
 	 * Returns an existing or new access control list
 	 *
-	 * @returns AclList
+	 * @return AclList
 	 */
+
 	public function getAcl()
 	{
-		if (!isset($this->persistent->acl)) {
-
+		if (!isset($this->persistent->acl)){
 			$acl = new AclList();
-
 			$acl->setDefaultAction(Acl::DENY);
-
 			// Register roles
 			$roles = [
 				'users'  => new Role(
@@ -40,14 +38,15 @@ class SecurityPlugin extends Plugin
 				)
 			];
 
+
 			foreach ($roles as $role) {
 				$acl->addRole($role);
 			}
 
 			//Private area resources
 			$privateResources = [
-				// 'post'     => ['index','delete']
-				// 'session'      => ['start']
+				'post'     => ['index', 'new', 'save', 'create', 'delete','send'],
+				'session'      => ['end']
 			];
 			foreach ($privateResources as $resource => $actions) {
 				$acl->addResource(new Resource($resource), $actions);
@@ -55,9 +54,8 @@ class SecurityPlugin extends Plugin
 
 			//Public area resources
 			$publicResources = [
-				'post'     => ['index','delete'],
-				'session'      => ['index','start','end'],
-				'register'      => ['index'],
+				'session'      => ['index','start'],
+				'register'      => ['index']
 			];
 			foreach ($publicResources as $resource => $actions) {
 				$acl->addResource(new Resource($resource), $actions);
@@ -78,11 +76,9 @@ class SecurityPlugin extends Plugin
 					$acl->allow('Users', $resource, $action);
 				}
 			}
-
 			//The acl is stored in session, APC would be useful here too
 			$this->persistent->acl = $acl;
 		}
-
 		return $this->persistent->acl;
 	}
 
@@ -108,22 +104,26 @@ class SecurityPlugin extends Plugin
 		$acl = $this->getAcl();
 
 		if (!$acl->isResource($controller)) {
-			$dispatcher->forward([
-				'controller' => 'errors',
-				'action'     => 'show404'
-			]);
-
+			$dispatcher->forward(
+					[
+							'controller' => 'session',
+							'action'     => 'index',
+					]
+			);
 			return false;
 		}
 
 		$allowed = $acl->isAllowed($role, $controller, $action);
 		if (!$allowed) {
-			$dispatcher->forward([
-				'controller' => 'errors',
-				'action'     => 'show401'
-			]);
+			$dispatcher->forward(
+					[
+							'controller' => 'session',
+							'action'     => 'index',
+					]
+			);
 			$this->session->destroy();
 			return false;
 		}
+
 	}
 }

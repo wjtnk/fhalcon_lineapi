@@ -7,7 +7,6 @@ class PostController extends Controller
 {
     public function indexAction()
     {
-
       $this->view->posts = Posts::find();
     }
 
@@ -53,7 +52,17 @@ class PostController extends Controller
     {
       $id = $this->request->getPost('id');
       $post = Posts::findFirst($id);
+      // lineに送るメソッド呼び出し
+      $this->sendToLine($post);
 
+      echo "Thanks for sending!";
+      $this->view->disable();
+      // return $this->response->redirect("/");
+    }
+
+    //lineに送るメソッド
+    private function sendToLine($post)
+    {
       $access_token = $_ENV['ACCESS_TOKEN'];
       $user_id = $_ENV['USER_ID'];
 
@@ -78,18 +87,10 @@ class PostController extends Controller
           CURLOPT_RETURNTRANSFER => true
       );
 
-
-
       $curl = curl_init();
       curl_setopt_array($curl, $options);
       curl_exec($curl);
       curl_close($curl);
-      /////////////////////////////////
-
-      echo "Thanks for sending!";
-      $this->view->disable();
-
-      // return $this->response->redirect("/");
     }
 
 
