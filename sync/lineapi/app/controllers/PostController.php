@@ -1,13 +1,50 @@
 <?php
 
-
 use Phalcon\Mvc\Controller;
+use Phalcon\Mvc\Model\Criteria;
+use Phalcon\Paginator\Adapter\Model as Paginator;
 
 class PostController extends Controller
 {
     public function indexAction()
     {
+      //一覧表示
       $this->view->posts = Posts::find();
+    }
+
+    public function searchAction()
+    {
+        $numberPage = 1;
+        if ($this->request->isPost()) {
+            $query = Criteria::fromInput($this->di, "Posts", $this->request->getPost());
+            $this->persistent->searchParams = $query->getParams();
+        } else {
+            $numberPage = $this->request->getQuery("page", "int");
+        }
+        $parameters = array();
+        if ($this->persistent->searchParams) {
+            $parameters = $this->persistent->searchParams;
+        }
+        //
+        $posts = Posts::find($parameters);
+        if (count($posts) == 0) {
+            $this->flash->notice("The search did not find any posts");
+            return $this->dispatcher->forward(
+                [
+                    "controller" => "products",
+                    "action"     => "index",
+                ]
+            );
+        }
+        //
+        $paginator = new Paginator(array(
+            "data"  => $posts,
+            "limit" => 10,
+            "page"  => $numberPage
+        ));
+
+        $this->view->page = $paginator->getPaginate();
+        $this->view->posts = $posts;
     }
 
     public function newAction()
@@ -65,7 +102,6 @@ class PostController extends Controller
     {
       $access_token = $_ENV['ACCESS_TOKEN'];
       $user_id = $_ENV['USER_ID'];
-
       //ヘッダ設定
       $header = array(
           'Content-Type: application/json',
@@ -89,6 +125,7 @@ class PostController extends Controller
 
       $curl = curl_init();
       curl_setopt_array($curl, $options);
+
       curl_exec($curl);
       curl_close($curl);
     }

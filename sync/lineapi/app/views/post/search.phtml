@@ -1,34 +1,11 @@
-
-<!-- 検索フォーム -->
-<form action='/post/search' method='post'>
-    <h2>message検索</h2>
-    <!-- <fieldset> -->
-      <!-- id検索 -->
-        <div class='control-group'>
-            <label for='id' class='control-label'>Id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-            <input type='text' id='id' name='id' />
-        </div>
-        <!-- message検索 -->
-        <div class='control-group'>
-            <label for='message' class='control-label'>message</label>
-            <input type='text' id='message' name='message' />
-        </div>
-
-        <div class='control-group'>
-            <input type='submit' value='Search' class='btn btn-primary' />
-        </div>
-
-    <!-- </fieldset> -->
-</form>
-
-<h1>message一覧</h1>
+<h1>検索結果</h1>
 <?php
 if ($posts->count() >= 0) {
     ?>
     <table class="table table-bordered table-hover">
         <thead class="thead-light">
         <tr>
-            <th>id</th>
+            <th>#</th>
             <th>message</th>
             <th>line送信</th>
             <th>削除</th>
@@ -62,8 +39,3 @@ if ($posts->count() >= 0) {
     <?php
 }
 ?>
-
-<!-- ログアウト -->
-<form action="/session/end" method="post">
-      <input type="submit" value="ログアウト">
-</form>

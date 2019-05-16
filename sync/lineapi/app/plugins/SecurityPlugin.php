@@ -45,7 +45,7 @@ class SecurityPlugin extends Plugin
 
 			//Private area resources
 			$privateResources = [
-				'post'     => ['index', 'new', 'save', 'create', 'delete','send'],
+				'post'     => ['index', 'search', 'new', 'save', 'create', 'delete','send'],
 				'session'      => ['end']
 			];
 			foreach ($privateResources as $resource => $actions) {
