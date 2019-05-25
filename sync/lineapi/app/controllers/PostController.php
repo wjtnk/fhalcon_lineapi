@@ -6,10 +6,15 @@ use Phalcon\Paginator\Adapter\Model as Paginator;
 
 class PostController extends Controller
 {
+
+
+
     public function indexAction()
     {
       //一覧表示
       $this->view->posts = Posts::find();
+
+
     }
 
     public function searchAction()
@@ -55,8 +60,6 @@ class PostController extends Controller
     public function createAction()
     {
         $post = new Posts();
-
-        // Store and check for errors
         $success = $post->save(
             $this->request->getPost(),
             [
@@ -78,6 +81,7 @@ class PostController extends Controller
         $this->view->disable();
     }
 
+    #hogeAction($パラメータ)でurlにあるパラメータの値を取得
     public function deleteAction($id)
     {
       $post = Posts::findFirstById($id);
@@ -87,9 +91,10 @@ class PostController extends Controller
 
     public function sendAction()
     {
+    #フォームから送られてきた値は$this->request->getPost('name属性');で取得可能
       $id = $this->request->getPost('id');
       $post = Posts::findFirst($id);
-      // lineに送るメソッド呼び出し
+      // privateメソッドを作り、参照することも可能
       $this->sendToLine($post);
 
       echo "Thanks for sending!";
@@ -97,20 +102,20 @@ class PostController extends Controller
       // return $this->response->redirect("/");
     }
 
-    //lineに送るメソッド
+    //privateメソッド
     private function sendToLine($post)
     {
       $access_token = $_ENV['ACCESS_TOKEN'];
-      $user_id = $_ENV['USER_ID'];
+      $user_id      = $_ENV['USER_ID'];
       //ヘッダ設定
       $header = array(
-          'Content-Type: application/json',
-          'Authorization: Bearer ' . $access_token
-      );
+                    'Content-Type: application/json',
+                    'Authorization: Bearer ' . $access_token
+                );
       $message = array(
-          'type' => 'text',
-          'text' => $post->message
-      );
+                     'type' => 'text',
+                     'text' => $post->message
+                  );
       $body = json_encode(array(
           'to' => $user_id,
           'messages'   => array($message)

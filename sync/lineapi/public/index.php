@@ -10,6 +10,9 @@ use Phalcon\Mvc\Dispatcher;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Session\Adapter\Files as Session;
 
+use Phalcon\Mvc\Router;
+
+
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
@@ -17,6 +20,7 @@ define('APP_PATH', BASE_PATH . '/app');
 //デバッグするのに必要(debugコンポーネントを使用する際には最後のtry-chachを無効にする必要がある)
 $debug = new \Phalcon\Debug();
 $debug->listen();
+
 
 // Register an autoloader
 $loader = new Loader();
@@ -102,6 +106,11 @@ $di->set(
 );
 
 
+
+$di->set('router', function(){
+    require APP_PATH.'/config/router.php';
+    return $router;
+});
 
 
 $application = new Application($di);

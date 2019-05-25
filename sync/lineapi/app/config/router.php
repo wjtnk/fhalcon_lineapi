@@ -1,7 +1,25 @@
 <?php
 
-$router = $di->getRouter();
+//$router = $di->getRouter();
+//
+//// Define your routes here
+//
+//$router->handle();
 
-// Define your routes here
+
+use Phalcon\Mvc\Router;
+// Create the router
+$router = new Router();
+
+$router->add(
+    '/hoge',
+    [
+        'controller' => 'post',
+        'action'     => 'new',
+    ]
+);
+
 
 $router->handle();
+
+
